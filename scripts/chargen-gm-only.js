@@ -1,6 +1,6 @@
 Hooks.once("ready", () => {
 
-  // Usiamo questo modulo solo con WFRP4e
+  // Funziona solo con WFRP4e
   if (game.system.id !== "wfrp4e") return;
 
   const MODULE = "wfrp4e-chargen-gm-only";
@@ -10,7 +10,7 @@ Hooks.once("ready", () => {
   if (!game.settings.settings.has(`${MODULE}.${KEY}`)) {
     game.settings.register(MODULE, KEY, {
       name: "Filtro CHARGEN (GM Only)",
-      hint: "Se attivo, tutti i messaggi dei giocatori in chat diventano visibili solo ai GM (utile durante la generazione PG).",
+      hint: "Se attivo, i messaggi della generazione PG non vengono mostrati ai giocatori.",
       scope: "world",
       config: true,
       type: Boolean,
@@ -18,27 +18,36 @@ Hooks.once("ready", () => {
     });
   }
 
-  // Hook sulla creazione dei messaggi di chat
-  Hooks.on("preCreateChatMessage", (doc, data, options, userId) => {
+  // Hook sul RENDER della chat: gira su OGNI client
+  Hooks.on("renderChatMessage", (message, html, data) => {
 
+    // Se il filtro è spento, non toccare nulla
     const enabled = game.settings.get(MODULE, KEY);
     if (!enabled) return;
 
-    // Se è già un whisper, non tocchiamo nulla
-    if (data.whisper && data.whisper.length) return;
+    // Il GM vede sempre tutto
+    if (game.user.isGM) return;
 
-    // Utente che sta creando il messaggio
-    const sender = game.users.get(userId);
-    if (!sender) return;
+    // Contenuto HTML del messaggio
+    const content = (message.content || "").toLowerCase();
 
-    // I GM non vengono filtrati: vedono e scrivono normalmente
-    if (sender.isGM) return;
+    // Pattern dei messaggi di generazione PG (quelli che hai riportato tu)
+    const chargenPatterns = [
+      "ha iniziato la generazione del personaggio",     // CHARGEN.Message.Start
+      "tirato:",                                        // CHARGEN.Message.Rolled
+      "scegli:",                                        // CHARGEN.Message.Chosen
+      "caratteristiche tirate",                         // CHARGEN.Message.RolledCharacteristics
+      "caratteristiche ritirate",                       // CHARGEN.Message.ReRolledCharacteristics
+      "scambiata",                                      // CHARGEN.Message.SwappedCharacteristics
+      "iniziata l'assegnazione delle caratteristiche",  // CHARGEN.Message.AllocateCharacteristics
+      "creato!"                                         // CHARGEN.Message.Created
+    ];
 
-    // Da qui in poi: è un messaggio creato da un player
-    // → lo trasformiamo in whisper cieco ai soli GM
-    const gmIds = game.users.filter(u => u.isGM).map(u => u.id);
+    const isChargen = chargenPatterns.some(p => content.includes(p));
+    if (!isChargen) return;
 
-    data.whisper = gmIds;
-    data.blind = true;
+    // Se arrivi qui: sei un GIOCATORE, il filtro è attivo
+    // e il messaggio è di CHARGEN → non lo vedi
+    html.remove();
   });
 });
