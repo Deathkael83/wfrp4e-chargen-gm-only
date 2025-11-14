@@ -1,0 +1,29 @@
+# Output di Forge
+out/
+cache/
+broadcast/
+gas-report.txt
+
+# Forge snapshots
+.snapshots/
+
+# Dati di test
+coverage/
+lcov.info
+
+# Node modules (se usi npm/yarn per tool vari)
+node_modules/
+
+# Dipendenze opzionali
+lib/*/
+!lib/your-allowed-lib/
+
+# File di ambiente
+.env
+.env.*
+
+# File temporanei IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
