@@ -15,7 +15,8 @@
   "systems": ["wfrp4e"],
   "esmodules": [
     "scripts/chargen-gm-only.js",
-    "scripts/create-chargen-ui-toggle-macro.js"
+    "scripts/create-chargen-ui-toggle-macro.js",
+    "scripts/block-player-ui-warnings.js"
   ],
   "url": "https://github.com/Deathkael83/wfrp4e-chargen-gm-only",
   "manifest": "https://github.com/Deathkael83/wfrp4e-chargen-gm-only/releases/latest/download/module.json",
