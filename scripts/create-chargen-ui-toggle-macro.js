@@ -1,0 +1,82 @@
+// scripts/create-chargen-ui-toggle-macro.js
+// Crea automaticamente la macro "Toggle Chargen UI Hidden" per il GM
+
+Hooks.once("ready", async () => {
+
+  if (!game.user.isGM) return;
+
+  const macroName = "Toggle Chargen UI Hidden";
+
+  // Se la macro esiste già, non ricrearla
+  let macro = game.macros.getName(macroName);
+  if (macro) return;
+
+  const command =
+`// Macro: TOGGLE CHARGEN NASCOSTA (versione aggiornata)
+// - hide-player-ui: hideForAllPlayers, chatLog, chatInput
+// - nores-interface-enhancements: hideChatPeek
+
+const HIDE_PLAYER_UI_MODULE = "hide-player-ui";
+const HIDE_PLAYER_UI_SETTING_KEY = "hideForAllPlayers";
+
+const NORE_MODULE = "nores-interface-enhancements";
+const NORE_SETTING_KEY = "hideChatPeek";
+
+(async () => {
+  // ===== LEGGI STATO CORRENTE =====
+  const current = game.settings.get(HIDE_PLAYER_UI_MODULE, HIDE_PLAYER_UI_SETTING_KEY);
+  const newValue = !current;
+
+  // ===== TOGGLE hideForAllPlayers =====
+  await game.settings.set(HIDE_PLAYER_UI_MODULE, HIDE_PLAYER_UI_SETTING_KEY, newValue);
+
+  // ===== TOGGLE Nore's hideChatPeek =====
+  try {
+    await game.settings.set(NORE_MODULE, NORE_SETTING_KEY, newValue);
+  } catch (e) {
+    console.warn("Impossibile aggiornare setting di Nore's Interface Enhancements:", e);
+  }
+
+  // ===== TOGGLE chatLog e chatInput =====
+  const CONFIG_SETTING = "settings";
+
+  let cfg = game.settings.get(HIDE_PLAYER_UI_MODULE, CONFIG_SETTING);
+
+  try {
+    cfg = foundry.utils.duplicate(cfg);
+  } catch (e) {
+    cfg = JSON.parse(JSON.stringify(cfg));
+  }
+
+  if (cfg.hideSideBar) {
+    if ("chatLog" in cfg.hideSideBar) {
+      cfg.hideSideBar.chatLog = newValue;
+    }
+    if ("chatInput" in cfg.hideSideBar) {
+      cfg.hideSideBar.chatInput = newValue;
+    }
+
+    await game.settings.set(HIDE_PLAYER_UI_MODULE, CONFIG_SETTING, cfg);
+  } else {
+    console.warn("hideSideBar non trovato in hide-player-ui.settings");
+  }
+
+  // ===== NOTIFICA =====
+  const stato = newValue ? "ATTIVATA" : "DISATTIVATA";
+  ui.notifications.info(\`Modalità CHARGEN nascosta: \${stato}. I giocatori devono ricaricare il client.\`);
+})();`;
+
+  // Crea la macro
+  macro = await Macro.create({
+    name: macroName,
+    type: "script",
+    img: "icons/svg/secret.svg",
+    command
+  });
+
+  // Mettila nel primo slot libero della hotbar del GM
+  const slot = ui.hotbar.getFreeSlot();
+  ui.hotbar.assignHotbarMacro(macro, slot);
+
+  ui.notifications.info("Macro 'Toggle Chargen UI Hidden' creata automaticamente.");
+});
