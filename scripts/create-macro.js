@@ -31,7 +31,7 @@ const KEY = "enabled";
   macro = await Macro.create({
     name: macroName,
     type: "script",
-    img: "icons/svg/lock.svg",
+    img: "icons/svg/padlock.svg",
     command
   });
 
