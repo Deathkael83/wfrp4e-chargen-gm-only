@@ -70,7 +70,7 @@ const NORE_SETTING_KEY = "hideChatPeek";
   macro = await Macro.create({
     name: macroName,
     type: "script",
-    img: "icons/svg/secret.svg",
+    img: "icons/svg/padlock.svg",
     command
   });
 
