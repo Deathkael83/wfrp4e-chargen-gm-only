@@ -5,7 +5,7 @@ Hooks.once("ready", async () => {
 
   if (!game.user.isGM) return;
 
-  const macroName = "Toggle Chargen UI Hidden";
+  const macroName = "Chargen UI Hidden";
 
   // Se la macro esiste già, non ricrearla
   let macro = game.macros.getName(macroName);
