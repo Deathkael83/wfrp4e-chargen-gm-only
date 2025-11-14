@@ -2,7 +2,7 @@ Hooks.once("ready", async () => {
 
   if (!game.user.isGM) return;
 
-  const macroName = "Toggle Chargen GM Only";
+  const macroName = "Secret Chargen";
 
   // Se la macro già esiste, non ricrearla
   let macro = game.macros.getName(macroName);
