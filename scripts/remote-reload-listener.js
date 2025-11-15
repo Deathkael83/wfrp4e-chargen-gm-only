@@ -18,14 +18,14 @@ Hooks.once("ready", () => {
     // Caso 1: oggetto completo delle impostazioni di Hide Player UI
     if (key === "hide-player-ui.settings") {
       ui.notifications.info("Il GM ha aggiornato la UI dei giocatori. Ricarico la pagina...");
-      setTimeout(() => window.location.reload(), 1000);
+      setTimeout(() => window.location.reload(), 2000);
       return;
     }
 
     // Caso 2: per sicurezza, anche il toggle diretto su hideForAllPlayers
     if (key === "hide-player-ui.hideForAllPlayers") {
       ui.notifications.info("Il GM ha aggiornato la UI dei giocatori. Ricarico la pagina...");
-      setTimeout(() => window.location.reload(), 1000);
+      setTimeout(() => window.location.reload(), 2000);
       return;
     }
 
