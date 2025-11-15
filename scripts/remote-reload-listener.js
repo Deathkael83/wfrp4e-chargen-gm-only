@@ -1,21 +1,34 @@
 // scripts/remote-reload-listener.js
-// Ogni client ascolta il comando "reload" dal GM e ricarica la pagina.
+// Ogni client NON-GM si ricarica quando il GM cambia la configurazione di Hide Player UI.
 
 Hooks.once("ready", () => {
-  // ID del modulo: DEVE essere uguale a quello in module.json
-  const MODULE_ID = "wfrp4e-chargen-gm-only";
 
-  console.log(`[${MODULE_ID}] Reload listener inizializzato per`, game.user.name);
+  // Questo comportamento serve solo sui player
+  if (game.user.isGM) return;
 
-  game.socket.on(`module.${MODULE_ID}`, data => {
-    console.log(`[${MODULE_ID}] Messaggio socket ricevuto su client`, game.user.name, data);
+  console.log("[wfrp4e-chargen-gm-only] Listener updateSetting inizializzato per", game.user.name);
 
-    if (!data || data.action !== "reload") return;
+  Hooks.on("updateSetting", (setting, changes, options, userId) => {
 
-    ui.notifications.info("Il GM ha aggiornato l'interfaccia. Ricarico la pagina...");
+    const key = setting.key || "";
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
+    // Debug facoltativo:
+    // console.log("[wfrp4e-chargen-gm-only] updateSetting su", game.user.name, key, setting, changes);
+
+    // Caso 1: oggetto completo delle impostazioni di Hide Player UI
+    if (key === "hide-player-ui.settings") {
+      ui.notifications.info("Il GM ha aggiornato la UI dei giocatori. Ricarico la pagina...");
+      setTimeout(() => window.location.reload(), 1000);
+      return;
+    }
+
+    // Caso 2: per sicurezza, anche il toggle diretto su hideForAllPlayers
+    if (key === "hide-player-ui.hideForAllPlayers") {
+      ui.notifications.info("Il GM ha aggiornato la UI dei giocatori. Ricarico la pagina...");
+      setTimeout(() => window.location.reload(), 1000);
+      return;
+    }
+
   });
+
 });
