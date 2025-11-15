@@ -1,5 +1,5 @@
 // scripts/create-chargen-ui-toggle-macro.js
-// Crea automaticamente la macro "Toggle Chargen UI Hidden" per il GM
+// Crea automaticamente la macro "Chargen UI Hidden" per il GM
 
 Hooks.once("ready", async () => {
 
@@ -21,6 +21,9 @@ const HIDE_PLAYER_UI_SETTING_KEY = "hideForAllPlayers";
 
 const NORE_MODULE = "nores-interface-enhancements";
 const NORE_SETTING_KEY = "hideChatPeek";
+
+// ID del modulo usato per il canale socket
+const RELOAD_MODULE_ID = "wfrp4e-chargen-gm-only";
 
 (async () => {
   // ===== LEGGI STATO CORRENTE =====
@@ -61,10 +64,10 @@ const NORE_SETTING_KEY = "hideChatPeek";
     console.warn("hideSideBar non trovato in hide-player-ui.settings");
   }
 
-  // ===== NOTIFICA =====
+  // ===== NOTIFICA + RELOAD CLIENT =====
   const stato = newValue ? "ATTIVATA" : "DISATTIVATA";
-  game.socket.emit(`module.wfrp4e-chargen-gm-only`, { action: "reload" });
-  ui.notifications.info(\`Modalità CHARGEN nascosta: \${stato}. I client dei giocatori verranno ricaricati.\`);  
+  game.socket.emit(\`module.\${RELOAD_MODULE_ID}\`, { action: "reload" });
+  ui.notifications.info(\`Modalità CHARGEN nascosta: \${stato}. I client dei giocatori verranno ricaricati.\`);
 })();`;
 
   // Crea la macro
@@ -79,5 +82,5 @@ const NORE_SETTING_KEY = "hideChatPeek";
   const slot = ui.hotbar.getFreeSlot();
   ui.hotbar.assignHotbarMacro(macro, slot);
 
-  ui.notifications.info("Macro 'Toggle Chargen UI Hidden' creata automaticamente.");
+  ui.notifications.info("Macro 'Chargen UI Hidden' creata automaticamente.");
 });
