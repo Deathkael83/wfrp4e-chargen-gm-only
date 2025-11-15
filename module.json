@@ -31,11 +31,7 @@
       },
         {
         "id": "nores-interface-enhancements",
-        "type": "module",
-        "manifest": "https://raw.githubusercontent.com/noreaga/nores-interface-enhancements/main/module.json",
-        "compatibility": {
-          "verified": "13"
-        }
+        "type": "module"
       }
     ]
   },
