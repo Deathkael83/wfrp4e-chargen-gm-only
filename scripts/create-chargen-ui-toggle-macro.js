@@ -63,7 +63,8 @@ const NORE_SETTING_KEY = "hideChatPeek";
 
   // ===== NOTIFICA =====
   const stato = newValue ? "ATTIVATA" : "DISATTIVATA";
-  ui.notifications.info(\`Modalità CHARGEN nascosta: \${stato}. I giocatori devono ricaricare il client.\`);
+  game.socket.emit(`module.wfrp4e-chargen-gm-only`, { action: "reload" });
+  ui.notifications.info(\`Modalità CHARGEN nascosta: \${stato}. I client dei giocatori verranno ricaricati.\`);  
 })();`;
 
   // Crea la macro
