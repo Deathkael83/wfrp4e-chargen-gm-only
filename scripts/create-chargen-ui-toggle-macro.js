@@ -22,9 +22,6 @@ const HIDE_PLAYER_UI_SETTING_KEY = "hideForAllPlayers";
 const NORE_MODULE = "nores-interface-enhancements";
 const NORE_SETTING_KEY = "hideChatPeek";
 
-// Deve essere uguale all'id del modulo in module.json
-const RELOAD_MODULE_ID = "wfrp4e-chargen-gm-only";
-
 (async () => {
   // ===== LEGGI STATO CORRENTE =====
   const current = game.settings.get(HIDE_PLAYER_UI_MODULE, HIDE_PLAYER_UI_SETTING_KEY);
@@ -64,14 +61,9 @@ const RELOAD_MODULE_ID = "wfrp4e-chargen-gm-only";
     console.warn("hideSideBar non trovato in hide-player-ui.settings");
   }
 
-  // ===== NOTIFICA + RELOAD CLIENT =====
+  // ===== NOTIFICA =====
   const stato = newValue ? "ATTIVATA" : "DISATTIVATA";
-
-  console.log(\`[\${RELOAD_MODULE_ID}] Invio comando reload dal GM\`, { action: "reload", newValue });
-
-  game.socket.emit(\`module.\${RELOAD_MODULE_ID}\`, { action: "reload", newValue });
-
-  ui.notifications.info(\`Modalità CHARGEN nascosta: \${stato}. I client dei giocatori verranno ricaricati.\`);
+  ui.notifications.info(\`Modalità CHARGEN nascosta: \${stato}. I client dei giocatori verranno ricaricati automaticamente.\`);
 })();`;
 
   // Crea la macro
