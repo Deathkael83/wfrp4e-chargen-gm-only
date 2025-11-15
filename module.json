@@ -2,7 +2,7 @@
   "id": "wfrp4e-chargen-gm-only",
   "title": "WFRP4e Chargen GM Only",
   "description": "Nasconde ai giocatori tutti i messaggi della generazione del personaggio di WFRP4e.",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "authors": [
     {
       "name": "Deathkael83"
@@ -12,7 +12,33 @@
     "minimum": "11",
     "verified": "13"
   },
-  "systems": ["wfrp4e"],
+  "relationships": {
+    "systems": [
+      {
+        "id": "wfrp4e",
+        "type": "system",
+        "manifest": "https://github.com/moo-man/WFRP4e-FoundryVTT/releases/latest/download/system.json"
+      }
+    ],
+    "requires": [
+      {
+        "id": "hide-player-ui",
+        "type": "module",
+        "manifest": "https://github.com/gsimon2/hide-player-ui/releases/latest/download/module.json",
+        "compatibility": {
+          "verified": "13.345"
+        },
+        {
+        "id": "nores-interface-enhancements",
+        "type": "module",
+        "manifest": "https://raw.githubusercontent.com/noreaga/nores-interface-enhancements/main/module.json",
+        "compatibility": {
+          "verified": "13"
+        }
+      }
+      }
+    ]
+  },
   "esmodules": [
     "scripts/create-chargen-ui-toggle-macro.js",
     "scripts/block-player-ui-warnings.js",
