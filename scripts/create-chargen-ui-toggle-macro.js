@@ -22,7 +22,7 @@ const HIDE_PLAYER_UI_SETTING_KEY = "hideForAllPlayers";
 const NORE_MODULE = "nores-interface-enhancements";
 const NORE_SETTING_KEY = "hideChatPeek";
 
-// ID del modulo usato per il canale socket
+// Deve essere uguale all'id del modulo in module.json
 const RELOAD_MODULE_ID = "wfrp4e-chargen-gm-only";
 
 (async () => {
@@ -66,7 +66,11 @@ const RELOAD_MODULE_ID = "wfrp4e-chargen-gm-only";
 
   // ===== NOTIFICA + RELOAD CLIENT =====
   const stato = newValue ? "ATTIVATA" : "DISATTIVATA";
-  game.socket.emit(\`module.\${RELOAD_MODULE_ID}\`, { action: "reload" });
+
+  console.log(\`[\${RELOAD_MODULE_ID}] Invio comando reload dal GM\`, { action: "reload", newValue });
+
+  game.socket.emit(\`module.\${RELOAD_MODULE_ID}\`, { action: "reload", newValue });
+
   ui.notifications.info(\`Modalità CHARGEN nascosta: \${stato}. I client dei giocatori verranno ricaricati.\`);
 })();`;
 
