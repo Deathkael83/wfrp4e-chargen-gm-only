@@ -27,7 +27,8 @@
         "manifest": "https://github.com/gsimon2/hide-player-ui/releases/latest/download/module.json",
         "compatibility": {
           "verified": "13.345"
-        },
+        }
+      },
         {
         "id": "nores-interface-enhancements",
         "type": "module",
@@ -35,7 +36,6 @@
         "compatibility": {
           "verified": "13"
         }
-      }
       }
     ]
   },
